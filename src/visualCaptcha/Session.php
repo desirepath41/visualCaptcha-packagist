@@ -10,7 +10,7 @@ class Session {
     }
 
     public function clear() {
-        $_SESSION[ $this->namespace ] = [];
+        $_SESSION[ $this->namespace ] = Array();
     }
 
     public function get( $key ) {

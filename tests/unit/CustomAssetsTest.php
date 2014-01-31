@@ -6,11 +6,15 @@ class CustomAssetsTest extends visualCaptcha_TestCase {
 
         $captcha = new \visualCaptcha\Captcha( $this->session, $assetsPath );
 
-        $this->assertCount( 2, $captcha->getAllImageOptions() );
-        $this->assertEquals( 'Cat', $captcha->getAllImageOptions()[ 0 ][ 'name' ] );
+        $imageOptions = $captcha->getAllImageOptions();
 
-        $this->assertCount( 2, $captcha->getAllAudioOptions() );
-        $this->assertEquals( '4plus1.mp3', $captcha->getAllAudioOptions()[ 0 ][ 'path' ] );
+        $this->assertCount( 2, $imageOptions );
+        $this->assertEquals( 'Cat', $imageOptions[ 0 ][ 'name' ] );
+
+        $audioOptions = $captcha->getAllAudioOptions();
+
+        $this->assertCount( 2, $audioOptions );
+        $this->assertEquals( '4plus1.mp3', $audioOptions[ 0 ][ 'path' ] );
     }
 }
 

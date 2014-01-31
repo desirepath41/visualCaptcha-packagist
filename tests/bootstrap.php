@@ -9,10 +9,10 @@ class visualCaptcha_TestCase extends PHPUnit_Framework_TestCase {
 }
 
 class DummySession extends \visualCaptcha\Session {
-    private $session = [];
+    private $session = Array();
 
     public function clear() {
-        $this->session = [];
+        $this->session = Array();
     }
 
     public function get( $key ) {

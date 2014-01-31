@@ -14,12 +14,12 @@ class Captcha {
     // All the image options.
     // These can be easily overwritten or extended using addImageOptions( <Array> ), or replaceImageOptions( <Array> )
     // By default, they're populated using the ./images.json file
-    private $imageOptions = [];
+    private $imageOptions = Array();
 
     // All the audio options.
     // These can be easily overwritten or extended using addImageOptions( <Array> ), or replaceImageOptions( <Array> )
     // By default, they're populated using the ./audios.json file
-    private $audioOptions = [];
+    private $audioOptions = Array();
 
     // @param session is the default session object
     // @param defaultImages is optional. Defaults to the array inside ./images.json. The path is relative to ./images/
@@ -55,7 +55,7 @@ class Captcha {
     // Generate a new valid option
     // @param numberOfOptions is optional. Defaults to 5
     public function generate( $numberOfOptions = 5 ) {
-        $imageValues = [];
+        $imageValues = Array();
 
         // Save previous image & audio options from session
         $oldImageOption = $this->getValidImageOption();
@@ -103,12 +103,14 @@ class Captcha {
         $this->session->set( 'validAudioOption', $newAudioOption );
 
         // Set random hashes for audio and image field names, and add it in the frontend data object
-        $this->session->set( 'frontendData', [
+        $validImageOption = $this->getValidImageOption();
+
+        $this->session->set( 'frontendData', Array(
             'values' => $imageValues,
-            'imageName' => $this->getValidImageOption()[ 'name' ],
+            'imageName' => $validImageOption[ 'name' ],
             'imageFieldName' => $this->utilRandomHex( 10 ),
             'audioFieldName' => $this->utilRandomHex( 10 )
-        ] );
+        ) );
     }
 
     // Stream audio file
@@ -177,12 +179,16 @@ class Captcha {
 
     // Validate the sent image value with the validImageOption
     public function validateImage( $sentOption ) {
-        return ( $sentOption == $this->getValidImageOption()[ 'value' ] );
+        $validImageOption = $this->getValidImageOption();
+
+        return ( $sentOption == $validImageOption[ 'value' ] );
     }
 
     // Validate the sent audio value with the validAudioOption
     public function validateAudio( $sentOption ) {
-        return ( $sentOption == $this->getValidAudioOption()[ 'value' ] );
+        $validAudioOption = $this->getValidAudioOption();
+
+        return ( $sentOption == $validAudioOption[ 'value' ] );
     }
 
     // Return generated image options
@@ -192,7 +198,9 @@ class Captcha {
 
     // Return generated image option at index
     public function getImageOptionAtIndex( $index ) {
-        return $this->getImageOptions()[ $index ];
+        $imageOptions = $this->getImageOptions();
+
+        return $imageOptions[ $index ];
     }
 
     // Alias for getValidAudioOption
@@ -225,7 +233,7 @@ class Captcha {
                 $count = count( $arr );
             }
 
-            $result = [];
+            $result = Array();
             $rand = array_rand( $arr, $count );
 
             foreach( $rand as $key ) {
