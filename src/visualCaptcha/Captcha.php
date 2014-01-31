@@ -200,7 +200,7 @@ class Captcha {
     public function getImageOptionAtIndex( $index ) {
         $imageOptions = $this->getImageOptions();
 
-        return $imageOptions[ $index ];
+        return ( isset( $imageOptions[ $index ] ) ) ? $imageOptions[ $index ] : null;
     }
 
     // Alias for getValidAudioOption

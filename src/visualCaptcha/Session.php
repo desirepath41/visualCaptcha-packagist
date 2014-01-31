@@ -18,7 +18,11 @@ class Session {
             $this->clear();
         }
 
-        return $_SESSION[ $this->namespace ][ $key ];
+        if ( isset( $_SESSION[ $this->namespace ][ $key ] ) ) {
+            return $_SESSION[ $this->namespace ][ $key ];
+        }
+
+        return null;
     }
 
     public function set( $key, $value ) {
