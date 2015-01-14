@@ -300,7 +300,7 @@ class Captcha {
 
             // Just figure out from a set of possibilities, if we didn't figure it out before
             $fileProperties = explode('.', $filePath);
-            $extension = end($filePropertiesp);
+            $extension = end($fileProperties);
 
             switch ( $extension ) {
                 case 'png':
