@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/emotionLoop/visualCaptcha-packagist.svg?flat=true&branch=master)](https://travis-ci.org/emotionLoop/visualCaptcha-packagist)
-[![Coverage Status](https://coveralls.io/repos/emotionLoop/visualCaptcha-packagist/badge.svg?flat=true)](https://coveralls.io/r/emotionLoop/visualCaptcha-packagist)
+[![Codacy](https://www.codacy.com/project/badge/8cc65dd81c9040a2a9ed262b07d4fa50)](https://www.codacy.com/app/bruno-bernardino/visualCaptcha-packagist)
 [![Code Climate](https://codeclimate.com/github/emotionLoop/visualCaptcha-packagist/badges/gpa.svg)](https://codeclimate.com/github/emotionLoop/visualCaptcha-packagist)
 
 # visualCaptcha-packagist
