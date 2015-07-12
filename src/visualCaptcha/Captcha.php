@@ -67,9 +67,9 @@ class Captcha {
         // Avoid the next IF failing if a string with a number is sent
         $numberOfOptions = intval( $numberOfOptions );
 
-        // Set the minimum numberOfOptions to two
-        if ( $numberOfOptions < 2 ) {
-            $numberOfOptions = 2;
+        // Set the minimum numberOfOptions to four
+        if ( $numberOfOptions < 4 ) {
+            $numberOfOptions = 4;
         }
 
         // Shuffle all imageOptions
@@ -270,6 +270,9 @@ class Captcha {
         $headers[ 'Expires' ] = 0;
 
         readfile( $filePath );
+
+        // Add some noise randomly, so images can't be saved and matched easily by filesize or checksum
+        echo $this->utilRandomHex( rand(0,1500) );
 
         return true;
     }

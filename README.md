@@ -146,3 +146,8 @@ You'll find more documentation on the code itself, but here's the simple list fo
 - `getAudioOption()` — Alias for getValidAudioOption.
 - `getAllImageOptions()` — Return all the image options.
 - `getAllAudioOptions()` — Return all the audio options.
+
+
+## License
+
+View the [LICENSE](LICENSE) file.
