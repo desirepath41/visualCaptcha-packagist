@@ -116,7 +116,7 @@ class Captcha {
     // Stream audio file
     // @param headers object. used to store http headers for streaming
     // @param fileType defaults to 'mp3', can also be 'ogg'
-    public function streamAudio( $headers, $fileType ) {
+    public function streamAudio( &$headers, $fileType ) {
         $audioOption = $this->getValidAudioOption();
         $audioFileName = isset( $audioOption ) ? $audioOption[ 'path' ] : ''; // If there's no audioOption, we set the file name as empty
         $audioFilePath = $this->assetsPath . '/audios/' . $audioFileName;
@@ -140,7 +140,7 @@ class Captcha {
     // @param headers object. used to store http headers for streaming
     // @param index of the image in the session images array to send
     // @paran isRetina boolean. Defaults to false
-    public function streamImage( $headers, $index, $isRetina ) {
+    public function streamImage( &$headers, $index, $isRetina ) {
         $imageOption = $this->getImageOptionAtIndex( $index );
         $imageFileName = $imageOption ? $imageOption[ 'path' ] : ''; // If there's no imageOption, we set the file name as empty
         $imageFilePath = $this->assetsPath . '/images/' . $imageFileName;
@@ -254,7 +254,7 @@ class Captcha {
     }
 
     // Stream file from path
-    private function utilStreamFile( $headers, $filePath ) {
+    private function utilStreamFile( &$headers, $filePath ) {
         if ( !file_exists( $filePath ) ) {
             return false;
         }
