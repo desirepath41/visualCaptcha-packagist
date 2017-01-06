@@ -73,10 +73,6 @@
     },
     {
         "path": "thirdmonth.mp3",
-        "value": "march"
-    },
-    {
-        "path": "thirdmonth.mp3",
         "value": "march|3"
     },
     {
