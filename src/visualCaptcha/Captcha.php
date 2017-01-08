@@ -187,8 +187,8 @@ class Captcha {
     // Validate the sent audio value with the validAudioOption
     public function validateAudio( $sentOption ) {
         $validAudioOption = $this->getValidAudioOption();
-
-        return ( $sentOption == $validAudioOption[ 'value' ] );
+        $validAnswers = explode("|", strtoupper($validAudioOption[ 'value' ]));
+        return (in_array(strtoupper($sentOption), $validAnswers));
     }
 
     // Return generated image options
