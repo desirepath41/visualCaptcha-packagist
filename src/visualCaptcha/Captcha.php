@@ -2,6 +2,8 @@
 
 namespace visualCaptcha;
 
+use Zend\Cache\StorageFactory;
+
 class Captcha {
     // Object that will have a reference for the session object
     // It will have .visualCaptcha.images, .visualCaptcha.audios, .visualCaptcha.validImageOption, and .visualCaptcha.validAudioOption
@@ -21,10 +23,15 @@ class Captcha {
     // By default, they're populated using the ./audios.json file
     private $audioOptions = Array();
 
+    // All the cache options
+    // Theses options are the related to \Zend\Cache\Storage
+    // By default, it´s been populated as null on Constructor, but you can use array options of Cache ZF2 backend   
+    private $cache;
+    
     // @param session is the default session object
     // @param defaultImages is optional. Defaults to the array inside ./images.json. The path is relative to ./images/
     // @param defaultAudios is optional. Defaults to the array inside ./audios.json. The path is relative to ./audios/
-    public function __construct( $session, $assetsPath = null, $defaultImages = null, $defaultAudios = null ) {
+    public function __construct( $session, $assetsPath = null, $defaultImages = null, $defaultAudios = null, $cacheOptions = null) {
         // Attach the session object reference to visualCaptcha
         $this->session = $session;
 
@@ -50,6 +57,21 @@ class Captcha {
 
         // Attach the audios object reference to visualCaptcha
         $this->audioOptions = $defaultAudios;
+        
+        $this->cache = $this->setCache($cacheOptions);
+        
+    }
+    
+    /**
+     * 
+     * @return \Zend\Cache\Storage\StorageInterface
+     */
+    private function setCache($options = null)
+    {
+        if($options)
+            return StorageFactory::factory($options);
+        
+        return false;
     }
 
     // Generate a new valid option
@@ -116,7 +138,7 @@ class Captcha {
     // Stream audio file
     // @param headers object. used to store http headers for streaming
     // @param fileType defaults to 'mp3', can also be 'ogg'
-    public function streamAudio( &$headers, $fileType ) {
+    public function streamAudio( $headers, $fileType ) {
         $audioOption = $this->getValidAudioOption();
         $audioFileName = isset( $audioOption ) ? $audioOption[ 'path' ] : ''; // If there's no audioOption, we set the file name as empty
         $audioFilePath = $this->assetsPath . '/audios/' . $audioFileName;
@@ -140,7 +162,7 @@ class Captcha {
     // @param headers object. used to store http headers for streaming
     // @param index of the image in the session images array to send
     // @paran isRetina boolean. Defaults to false
-    public function streamImage( &$headers, $index, $isRetina ) {
+    public function streamImage( $headers, $index, $isRetina ) {
         $imageOption = $this->getImageOptionAtIndex( $index );
         $imageFileName = $imageOption ? $imageOption[ 'path' ] : ''; // If there's no imageOption, we set the file name as empty
         $imageFilePath = $this->assetsPath . '/images/' . $imageFileName;
@@ -187,8 +209,8 @@ class Captcha {
     // Validate the sent audio value with the validAudioOption
     public function validateAudio( $sentOption ) {
         $validAudioOption = $this->getValidAudioOption();
-        $validAnswers = explode("|", strtoupper($validAudioOption[ 'value' ]));
-        return (in_array(strtoupper($sentOption), $validAnswers));
+
+        return ( $sentOption == $validAudioOption[ 'value' ] );
     }
 
     // Return generated image options
@@ -254,7 +276,7 @@ class Captcha {
     }
 
     // Stream file from path
-    private function utilStreamFile( &$headers, $filePath ) {
+    private function utilStreamFile( $headers, $filePath ) {
         if ( !file_exists( $filePath ) ) {
             return false;
         }
@@ -268,15 +290,37 @@ class Captcha {
         $headers[ 'Cache-Control' ] = 'no-cache, no-store, must-revalidate';
         $headers[ 'Pragma' ] = 'no-cache';
         $headers[ 'Expires' ] = 0;
-
-        readfile( $filePath );
-
+        
+        $img = $this->getImageFromCache($filePath);
+        echo $img;
+        
+        //readfile( $filePath );
         // Add some noise randomly, so images can't be saved and matched easily by filesize or checksum
         echo $this->utilRandomHex( rand(0,1500) );
 
         return true;
     }
 
+    /**
+     * Return the image string from cache to avoid I/O
+     * @param string $filePath
+     */
+    private function getImageFromCache($filePath)
+    {
+        if(is_object($this->cache)){
+            $cacheKey = md5($filePath);
+            $img = $this->cache->getItem($cacheKey);
+            if(!$img){
+                $img = file_get_contents($filePath);
+                $this->cache->setItem($cacheKey,$img);
+            }
+            return $img;
+        }
+        
+        return file_get_contents($filePath);
+    }
+    
+    
     // Get File's mime type
     private function getMimeType( $filePath ) {
         if ( function_exists('mime_content_type') ) {
