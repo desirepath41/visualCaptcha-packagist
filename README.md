@@ -37,6 +37,26 @@ Where:
 
 - `$namespace` is optional. It's a string and defaults to 'visualcaptcha'. You'll need to specifically set this if you're using more than one visualCaptcha instance in the same page, so the code can identify from which one is the validation coming from.
 
+### Using Cache
+
+You can use a backend Zend-Cache library options to store images on cache and avoid I/O.
+You'll have to pass options parameter on the cosntructor as document in https://docs.zendframework.com/zend-cache/storage/adapter/.
+By dafault it is disabled and you´ll have to pass true on the constructor on the 5th parameter.
+
+```
+$options = array(
+                'adapter' => array(
+                    'name'    => 'memory',
+                    'options' => array('ttl' => 3600,
+                        'namespace' => "captcha-service"),
+                ),
+                'plugins' => array( 
+                    'exception_handler' => array('throw_exceptions' => false),
+                ),
+            );
+        
+$captchaWithCache = new \visualCaptcha\Captcha( $this->session,null,null,null, true,$options);
+```
 
 ### Setting Routes for the front-end
 

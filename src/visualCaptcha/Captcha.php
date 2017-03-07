@@ -31,7 +31,7 @@ class Captcha {
     // @param session is the default session object
     // @param defaultImages is optional. Defaults to the array inside ./images.json. The path is relative to ./images/
     // @param defaultAudios is optional. Defaults to the array inside ./audios.json. The path is relative to ./audios/
-    public function __construct( $session, $assetsPath = null, $defaultImages = null, $defaultAudios = null, $cacheOptions = null) {
+    public function __construct( $session, $assetsPath = null, $defaultImages = null, $defaultAudios = null, $cached = false, $cacheOptions = null) {
         // Attach the session object reference to visualCaptcha
         $this->session = $session;
 
@@ -58,7 +58,8 @@ class Captcha {
         // Attach the audios object reference to visualCaptcha
         $this->audioOptions = $defaultAudios;
         
-        $this->cache = $this->setCache($cacheOptions);
+        
+        $this->cache = $this->setCache($cached, $cacheOptions);
         
     }
     
@@ -66,9 +67,9 @@ class Captcha {
      * 
      * @return \Zend\Cache\Storage\StorageInterface
      */
-    private function setCache($options = null)
+    private function setCache($cached, $options = null)
     {
-        if($options)
+        if($cached)
             return StorageFactory::factory($options);
         
         return false;
@@ -138,7 +139,7 @@ class Captcha {
     // Stream audio file
     // @param headers object. used to store http headers for streaming
     // @param fileType defaults to 'mp3', can also be 'ogg'
-    public function streamAudio( $headers, $fileType ) {
+    public function streamAudio( &$headers, $fileType ) {
         $audioOption = $this->getValidAudioOption();
         $audioFileName = isset( $audioOption ) ? $audioOption[ 'path' ] : ''; // If there's no audioOption, we set the file name as empty
         $audioFilePath = $this->assetsPath . '/audios/' . $audioFileName;
@@ -162,7 +163,7 @@ class Captcha {
     // @param headers object. used to store http headers for streaming
     // @param index of the image in the session images array to send
     // @paran isRetina boolean. Defaults to false
-    public function streamImage( $headers, $index, $isRetina ) {
+    public function streamImage( &$headers, $index, $isRetina ) {
         $imageOption = $this->getImageOptionAtIndex( $index );
         $imageFileName = $imageOption ? $imageOption[ 'path' ] : ''; // If there's no imageOption, we set the file name as empty
         $imageFilePath = $this->assetsPath . '/images/' . $imageFileName;
@@ -307,7 +308,7 @@ class Captcha {
      */
     private function getImageFromCache($filePath)
     {
-        if(is_object($this->cache)){
+        if($this->cache != false){
             $cacheKey = md5($filePath);
             $img = $this->cache->getItem($cacheKey);
             if(!$img){
