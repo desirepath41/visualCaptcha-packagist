@@ -277,7 +277,7 @@ class Captcha {
     }
 
     // Stream file from path
-    private function utilStreamFile( $headers, $filePath ) {
+    private function utilStreamFile( &$headers, $filePath ) {
         if ( !file_exists( $filePath ) ) {
             return false;
         }
