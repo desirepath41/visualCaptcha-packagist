@@ -40,8 +40,8 @@ Where:
 ### Using Cache
 
 You can use a backend Zend-Cache library options to store images on cache and avoid I/O.
-You'll have to pass options parameter on the cosntructor as document in https://docs.zendframework.com/zend-cache/storage/adapter/.
-By dafault it is disabled and you´ll have to pass true on the constructor on the 5th parameter.
+You'll have to pass options parameter on the constructor as document in https://docs.zendframework.com/zend-cache/storage/adapter/.
+By default it is disabled and you´ll have to pass true on the constructor on the 5th parameter.
 
 ```
 $options = array(

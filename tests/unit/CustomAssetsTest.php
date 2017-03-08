@@ -37,7 +37,8 @@ class CustomAssetsTest extends visualCaptcha_TestCase {
         $this->assertCount( 2, $imageOptions );
         $this->assertEquals( 'Cat', $imageOptions[ 0 ][ 'name' ] );
         
-        $captchaWithouCache = new \visualCaptcha\Captcha( $this->session,$assetsPath);
+        $captchaWithoutCache = new \visualCaptcha\Captcha( $this->session,$assetsPath);
+        $imageOptions = $captchaWithoutCache->getAllImageOptions();
         $this->assertCount( 2, $imageOptions );
         $this->assertEquals( 'Cat', $imageOptions[ 0 ][ 'name' ] );
     }
