@@ -1,5 +1,5 @@
 {
-    "version": "0.0.7",
+    "version": "0.0.8",
     "name": "emotionloop/visualcaptcha",
     "description": "PHP library for visualCaptcha. Still requires you to have the front-end companion.",
     "keywords": ["captcha", "visualCaptcha", "security"],
@@ -17,7 +17,8 @@
         "issues": "https://github.com/emotionLoop/visualCaptcha-packagist/issues"
     },
     "require": {
-        "php": ">=5.3"
+        "php": ">=5.3",
+        "zendframework/zend-cache" : "^2.0.3"
     },
     "require-dev": {
         "phpunit/phpunit": "*"
